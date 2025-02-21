@@ -1,0 +1,129 @@
+\chapter{ICMP Structure}
+\minitoc
+
+\newpage
+\section{ICMP Packet}
+\subsection{What is an ICMP packet?}
+An ICMP packet is a packet that uses the ICMP protocol. ICMP packets include an ICMP header after a normal IP header. When a router or server needs to send an error message, the ICMP packet body or data section always contains a copy of the IP header of the packet that caused the error.
+
+\subsection{ICMP Packet Format}
+The ICMP packet structure starts with the first 32 bits, which consist of three primary fields:
+
+\begin{itemize}
+	\item \textbf{Type (8-bit):} This field defines the message type and provides a brief description, helping the receiving network identify the message and determine how to respond. Common ICMP message types include:
+	\begin{itemize}
+		\item Type 0 – Echo Reply
+		\item Type 3 – Destination Unreachable
+		\item Type 5 – Redirect Message
+		\item Type 8 – Echo Request
+		\item Type 11 – Time Exceeded
+		\item Type 12 – Parameter Problem
+	\end{itemize}
+	
+	\item \textbf{Code (8-bit):} The next 8-bit field provides additional information about the specific error type or condition, refining the details given by the Type field.
+	
+	\item \textbf{Checksum (16-bit):} The final 16 bits of the first 32-bit segment form the checksum, which ensures the integrity of the entire ICMP message by verifying that no data corruption has occurred during transmission.
+\end{itemize}
+
+Following these fields, the \textbf{next 32 bits} of the ICMP header act as an \textbf{Extended Header}, which identifies errors within an IP message. Specific byte locations of errors are marked using a pointer, allowing the receiving device to pinpoint and analyze the issue.
+
+The \textbf{final section} of the ICMP packet is the \textbf{Data or Payload}, which has a variable length. For IPv4, this payload typically contains up to \textbf{576 bytes}, whereas in IPv6, it extends up to \textbf{1280 bytes}.
+
+\begin{table}[h]
+	\centering
+	\renewcommand{\arraystretch}{1.5}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{Type (8 bits)} & \textbf{Code (8 bits)} & \textbf{Checksum (16 bits)} \\
+		\hline
+		\multicolumn{3}{|c|}{\textbf{Rest of Header (32 bits)}} \\
+		\hline
+		\multicolumn{3}{|c|}{\textbf{Data (Variable length)}} \\
+		\hline
+	\end{tabular}
+	\caption{ICMP Packet Format}
+	\label{tab:icmp_packet}
+\end{table}
+
+\section{Understanding ICMP Messages}
+ICMP messages are identified by their \textbf{Type} and \textbf{Code} fields. Below are some of the most well-known and widely used ICMP message types and their codes:
+
+\begin{itemize}
+	\item \textbf{Echo Request (Type 8, Code 0)}: Sent by tools like \texttt{ping} to check if a host is reachable.
+	\item \textbf{Echo Reply (Type 0, Code 0)}: Sent in response to an Echo Request to confirm reachability.
+	\item \textbf{Destination Unreachable (Type 3)}:
+	\begin{itemize}
+		\item \textbf{Code 0}: Network Unreachable.
+		\item \textbf{Code 1}: Host Unreachable.
+		\item \textbf{Code 3}: Port Unreachable.
+		\item \textbf{Code 4}: Fragmentation Needed but DF (Don't Fragment) flag set.
+	\end{itemize}
+	\item \textbf{Time Exceeded (Type 11)}:
+	\begin{itemize}
+		\item \textbf{Code 0}: TTL (Time to Live) expired in transit.
+		\item \textbf{Code 1}: Fragment reassembly time exceeded.
+	\end{itemize}
+	\item \textbf{Redirect (Type 5)}:
+	\begin{itemize}
+		\item \textbf{Code 0}: Redirect for the Network.
+		\item \textbf{Code 1}: Redirect for the Host.
+	\end{itemize}
+	\item \textbf{Parameter Problem (Type 12, Code 0)}: Indicates an issue with the IP header or options.
+\end{itemize}
+
+These message types and codes are essential for diagnosing and troubleshooting network issues, for more ICMP message type you can refure to the table bellow (table:\ref{tab:icmp}).
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|c|l|}
+		\hline
+		\textbf{Type} & \textbf{Code} & \textbf{Description} \\
+		\hline
+		0 – Echo Reply & 0 & Echo reply \\
+		\hline
+		3 – Destination Unreachable & 0 & Destination network unreachable \\
+		& 1 & Destination host unreachable \\
+		& 2 & Destination protocol unreachable \\
+		& 3 & Destination port unreachable \\
+		& 4 & Fragmentation is needed and the DF flag set \\
+		& 5 & Source route failed \\
+		\hline
+		5 – Redirect Message & 0 & Redirect the datagram for the network \\
+		& 1 & Redirect datagram for the host \\
+		& 2 & Redirect the datagram for the Type of Service and Network \\
+		& 3 & Redirect datagram for the Service and Host \\
+		\hline
+		8 – Echo Request & 0 & Echo request \\
+		\hline
+		9 – Router Advertisement & 0 & {Used to discover the addresses of operational routers} \\
+		10 – Router Solicitation & 0 & \\
+		\hline
+		{11 – Time Exceeded} & 0 & Time to live exceeded in transit \\
+		& 1 & Fragment reassembly time exceeded \\
+		\hline
+		{12 – Parameter Problem} & 0 & The pointer indicates an error \\
+		& 1 & Missing required option \\
+		& 2 & Bad length \\
+		\hline
+		13 – Timestamp & 0 & Used for time synchronization \\
+		\hline
+		14 – Timestamp Reply & 0 & Reply to Timestamp message \\
+		\hline
+	\end{tabular}
+	\caption{ICMP Types and Codes}
+	\label{tab:icmp}
+\end{table}
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
